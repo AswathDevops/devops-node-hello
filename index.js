@@ -21,12 +21,12 @@ app.get('/', (req, res) => {
   res.send('Hello how are you!');
 });
 
+app.listen(port, () => {
+  console.log(`App running on http://localhost:${port}`);
+});
+
 // Proper Prometheus metrics endpoint
 app.get('/metrics', async (req, res) => {
   res.set('Content-Type', register.contentType);
   res.end(await register.metrics());
-});
-
-app.listen(port, () => {
-  console.log(`App running on http://localhost:${port}`);
 });
