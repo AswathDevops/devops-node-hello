@@ -4,28 +4,27 @@ const client = require('prom-client');
 const app = express();
 const port = 3000;
 
-// Create a Registry and collect default metrics
+// Create a Registry
 const register = new client.Registry();
 client.collectDefaultMetrics({ register });
 
-// Custom metric: count HTTP requests
+// Custom metric
 const httpRequestCounter = new client.Counter({
   name: 'http_requests_total',
   help: 'Total number of HTTP requests to /',
 });
-
 register.registerMetric(httpRequestCounter);
 
-// Normal app route
+// Route: Increment metric
 app.get('/', (req, res) => {
-  httpRequestCounter.inc(); // increment counter
-  res.send("Hello Ajeesh Nitish Rajesh , Coimbatore la meet panniduvoma? on July 19!");
+  httpRequestCounter.inc();
+  res.send('Hello how are you!');
 });
 
-// ✅ Proper /metrics route
+// Proper Prometheus metrics endpoint
 app.get('/metrics', async (req, res) => {
-  res.setHeader('Content-Type', register.contentType);
-  res.send(await register.metrics());
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
 });
 
 app.listen(port, () => {
